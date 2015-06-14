@@ -61,13 +61,13 @@ to be shared can and should be stored in a version control system.
 4.  [Tracking Changes](04-changes.html)
 5.  [Exploring History](05-history.html)
 6.  [Ignoring Things](06-ignore.html)
-6.  [Branching](07-branching.html)
-7.  [Remotes in GitHub](08-github.html)
-8.  [Collaborating](09-collab.html)
-9.  [Conflicts](10-conflict.html)
-10. [Open Science](11-open.html)
-11. [Licensing](12-licensing.html)
-12. [Hosting](13-hosting.html)
+7.  [Branching](07-branching.html)
+8.  [Remotes in GitHub](08-github.html)
+9.  [Collaborating](09-collab.html)
+10.  [Conflicts](10-conflict.html)
+11. [Open Science](11-open.html)
+12. [Licensing](12-licensing.html)
+13. [Hosting](13-hosting.html)
 
 ## Other Resources
 
