@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: Version Control with Git</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="css/swc.css" />
+    <link rel="alternate" type="application/rss+xml" title="Software Carpentry Blog" href="http://software-carpentry.org/feed.xml"/>
+    <meta charset="UTF-8" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body class="lesson">
+    <div class="container card">
+      <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
+      </div>
+      <article>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+                    <a href="index.html"><h1 class="title">Version Control with Git</h1></a>
+          <h2 class="subtitle">Branching</h2>
+          <p>Here’s where we are right now:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> log</code></pre>
+<pre class="output"><code>commit 005937fbe2a98fb83f0ade869025dc2636b4dad5
+Author: Vlad Dracula &lt;vlad@tran.sylvan.ia&gt;
+Date:   Thu Aug 22 10:14:07 2013 -0400
+
+    Thoughts about the climate
+
+commit 34961b159c27df3b475cfe4415d94a6d1fcd064d
+Author: Vlad Dracula &lt;vlad@tran.sylvan.ia&gt;
+Date:   Thu Aug 22 10:07:21 2013 -0400
+
+    Concerns about Mars&#39;s moons on my furry friend
+
+commit f22b25e3233b4645dabd0d81e651fe074bd8e73b
+Author: Vlad Dracula &lt;vlad@tran.sylvan.ia&gt;
+Date:   Thu Aug 22 09:51:46 2013 -0400
+
+    Starting to think about Mars
+
+$ cat mars.txt
+Cold and dry, but everything is my favorite color
+The two moons may be a problem for Wolfman
+But the Mummy will appreciate the lack of humidity</code></pre>
+<p>We can draw the history of the repository like this (we’ll see in a second why there’s a box called <code>master</code>):</p>
+<p><img src="fig/git-branching-01.svg" alt="Initial State of Repository" /></p>
+<p>Let’s run this command:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> branch moons</code></pre>
+<p>It appears to do nothing, but behind the scenes it has created a new <a href="../../gloss.html#branch">branch</a> called <code>moons</code>:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> branch</code></pre>
+<pre class="output"><code>* master
+  moons</code></pre>
+<p><img src="fig/git-branching-02.svg" alt="Immediately After Creating Branch" /></p>
+<p>Git is now maintaining two named bookmarks in our history: <code>master</code>, which was created automatically when we set up the repository, and <code>moons</code>, which we just made. They both point to the same revision right now, but we can change that. Let’s make <code>moons</code> the active branch:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> checkout moons</code></pre>
+<pre class="output"><code>Switched to branch &#39;moons&#39;</code></pre>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> branch</code></pre>
+<pre class="output"><code>  master
+* moons</code></pre>
+<p><img src="fig/git-branching-03.svg" alt="After Switching to Branch" /></p>
+<p>Our file looks the same:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cat</span> mars.txt</code></pre>
+<pre class="output"><code>Cold and dry, but everything is my favorite color
+The two moons may be a problem for Wolfman
+But the Mummy will appreciate the lack of humidity</code></pre>
+<p>because it <em>is</em> the same: Let’s add another line to it:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">echo</span> <span class="st">&quot;Maybe we should put the base on one of the moons instead?&quot;</span> <span class="kw">&gt;&gt;</span> mars.txt</code></pre>
+<p>and add an entirely new file:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">echo</span> <span class="st">&quot;Phobos is larger than Deimos&quot;</span> <span class="kw">&gt;</span> moons.txt
+$ <span class="kw">ls</span></code></pre>
+<pre class="output"><code>mars.txt    moons.txt</code></pre>
+<p>Git now tells us that we have one changed file and one new file:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> status</code></pre>
+<pre class="output"><code># On branch moons
+# Changes not staged for commit:
+#   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+#   (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)
+#
+#    modified:   mars.txt
+#
+# Untracked files:
+#   (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+#
+#    moons.txt
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</code></pre>
+<p>Let’s add and commit those changes (the <code>-A</code> flag to <code>git commit</code> means “add everything”):</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> add -A
+$ <span class="kw">git</span> status</code></pre>
+<pre class="output"><code># On branch moons
+# Changes to be committed:
+#   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)
+#
+#    modified:   mars.txt
+#    new file:   moons.txt
+#</code></pre>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> commit -m <span class="st">&quot;Thinking about the moons&quot;</span></code></pre>
+<pre class="output"><code>[moons 62e7791] Thinking about the moons
+ 2 files changed, 2 insertions(+)
+ create mode 100644 moons.txt</code></pre>
+<p>Our repository is now in the state shown below:</p>
+<p><img src="fig/git-branching-04.svg" alt="After Committing on Moons Branch" /></p>
+<p>The <code>moons</code> branch has advanced to record the changes we just made, but <code>master</code> is still where it was. If we switch back to <code>master</code>:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> checkout master</code></pre>
+<p>our changes seem to disappear:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">ls</span></code></pre>
+<pre class="output"><code>mars.txt</code></pre>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cat</span> mars.txt</code></pre>
+<pre class="output"><code>Cold and dry, but everything is my favorite color
+The two moons may be a problem for Wolfman
+But the Mummy will appreciate the lack of humidity</code></pre>
+<p>They’re still in the repository—they’re just not in the revision that <code>master</code> is currently pointing to. In essence, we’ve created a parallel timeline that shares some history with the original one before diverging.</p>
+<p>Let’s make some changes in the <code>master</code> branch to further illustrate this point:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">echo</span> <span class="st">&quot;Should we go with a classical name like Ares Base?&quot;</span> <span class="kw">&gt;</span> names.txt
+$ <span class="kw">git</span> status</code></pre>
+<pre class="output"><code># On branch master
+# Untracked files:
+#   (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+#
+#    names.txt
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)</code></pre>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> add names.txt
+$ <span class="kw">git</span> commit -m <span class="st">&quot;We will need a cool name for our secret base&quot;</span></code></pre>
+<pre class="output"><code>[master dfcf908] We will need a cool name for our secret base
+ 1 file changed, 1 insertion(+)
+ create mode 100644 names.txt</code></pre>
+<p>Our repository is now in this state:</p>
+<p><img src="fig/git-branching-05.svg" alt="After Committing on Master Branch" /></p>
+<p><code>master</code> and <code>moons</code> have both moved on from their original common state, but in different ways. They could continue independent existence indefinitely, but at some point we’ll probably want to <a href="../../gloss.html#merge">merge</a> our changes. Let’s do that now:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> branch</code></pre>
+<pre class="output"><code>* master
+  moons</code></pre>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> merge moons</code></pre>
+<p>When we run the <code>git merge</code> command, Git opens an editor to let us write a log entry about what we’re doing. The editor session initially contains this:</p>
+<div class="file" markdown="1">
+<pre><code>Merge branch &#39;moons&#39;
+
+# Please enter a commit message to explain why this merge is necessary,
+# especially if it merges an updated upstream into a topic branch.
+#
+# Lines starting with &#39;#&#39; will be ignored, and an empty message aborts
+# the commit.</code></pre>
+</div>
+<p>If we notice that something is wrong and decide not to complete the merge, we must delete everything in the file—Git interprets an empty log message to mean, “Don’t proceed.” Otherwise, everything that isn’t marked as a comment with <code>#</code> will be saved to the log. In this case, we’ll stick with the default log message. When we save the file and exit the editor, Git displays this:</p>
+<pre class="output"><code>Merge made by the &#39;recursive&#39; strategy.
+ mars.txt  | 1 +
+ moons.txt | 1 +
+ 2 files changed, 2 insertions(+)
+ create mode 100644 moons.txt</code></pre>
+<p>We now have all of our changes in one place:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">ls</span></code></pre>
+<pre class="output"><code>mars.txt    moons.txt    names.txt</code></pre>
+<p>and our repository looks like this:</p>
+<p><img src="fig/git-branching-06.svg" alt="After Merging" /></p>
+<p>We can ask Git to draw a diagram of the repository’s history with this command:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> log --oneline --topo-order --graph</code></pre>
+<pre class="output"><code>*   e0cf8ab Merge branch &#39;moons&#39;
+|\
+| * 62e7791 Thinking about the moons
+* | dfcf908 We will need a cool name for our secret base
+|/
+* 005937f Thoughts about the climate
+* 34961b1 Concerns about Mars&#39;s moons on my furry friend
+* f22b25e Starting to think about Mars</code></pre>
+<p>This ASCII art is fine for small sets of changes, but for anything significant, it’s much better to use a GUI that can draw graphs using lines instead of characters.</p>
+<p>Branching strikes most newcomers as unnecessary complexity, particularly for single-author projects. After all, if we need to make some changes to a project, what do we gain by creating parallel universes?</p>
+<p>The answer is that branching makes it easy for us to concentrate on one thing at a time. Suppose we are part-way through rewriting a function that calculates spatial correlations when we realize that the task would be easier if our file I/O routines always stored things as complex numbers. Most people would put the spatial correlation changes aside, change the file I/O, then (hopefully) come back to the original task.</p>
+<p>The problem with this is that we have to remember what we were doing, even if we realize halfway through rewriting file I/O that we should also rewrite our error handling. It’s quite common to wind up with half a dozen tasks stacked on top of one another, and quite hard to them all straight. Branching allows us to put what we’re doing in a safe place, solve the new problem, then resume our earlier work.</p>
+<p>In practice, most developers never make changes directly in the <code>master</code> branch. Instead, they create a new branch from it for every change they want to make, then merge those branches back to <code>master</code> when the work is complete. Returning to our hypothetical example, we would:</p>
+<ol style="list-style-type: decimal">
+<li>create a branch called something like <code>better-spatial-correlation</code> for those changes;</li>
+<li>go back to master and create another branch called <code>file-input-produces-complex-values</code> for <em>those</em> changes;</li>
+<li>merge <code>file-input-produces-complex-values</code> into <code>master</code>;</li>
+<li>merge <code>master</code> into <code>better-spatial-correlation</code>; and</li>
+<li>finish work on the spatial correlation function and merge it all back into <code>master</code>.</li>
+</ol>
+<p>And if, partway through this process, our supervisor asked us to change the graph-plotting routines to conform to the university’s new style guide, we would simply switch back to <code>master</code>, create a branch for that, make the changes, produce the desired graphs, and leave the changes parked in that branch until we were ready to merge them.</p>
+        </div>
+      </div>
+      </article>
+      <div class="footer">
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/swcarpentry/git-novice">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
+        <a class="label swc-blue-bg" href="LICENSE.html">License</a>
+      </div>
+    </div>
+    <!-- Javascript placed at the end of the document so the pages load faster -->
+    <script src="http://software-carpentry.org/v5/js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/bootstrap-js/bootstrap.js"></script>
+  </body>
+</html>
