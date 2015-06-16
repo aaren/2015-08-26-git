@@ -84,6 +84,10 @@ subtitle: Reference
 
 ## Glossary
 
+branch
+:   A linked series of commits, usually representing an independent
+    line of development.
+
 change set
 :   A group of changes to one or more files that are or will be added
     to a single [commit](#commit) in a [version control](#version-control)
