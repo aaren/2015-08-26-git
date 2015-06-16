@@ -31,6 +31,16 @@ subtitle: Reference
 
 *   The `.gitignore` file tells Git what files to ignore.
 
+## [Branching](07-branching.html)
+
+*   All work is performed on a **branch**. The default branch is `master`.
+*   `git branch` lists the existing branches
+*   `git branch xxx` creates a new branch called `xxx`, starting
+    from the current branch.
+*   `git checkout xxx` switches to the branch `xxx`
+*   `git merge xxx` merges the changes from `xxx` into the current
+    branch.
+
 ## [Remotes in GitHub](08-github.html)
 
 *   A local Git repository can be connected to one or more remote repositories.
